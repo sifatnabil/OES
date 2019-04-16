@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "EndExam";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<h2>EndExam</h2>
+
+<div class="main-content">
+    <div class="container">
+        <h2>Exam has ended</h2>
+        <h2>Your score is @TempData["Score"]</h2>
+        @Html.ActionLink("Go to Home", "Index", "Students")
+    </div>
+    
+</div>

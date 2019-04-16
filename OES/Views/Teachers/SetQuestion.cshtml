@@ -1,0 +1,217 @@
+﻿@model OES.Models.Question
+@{
+    ViewBag.Title = "SetQuestion";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+
+
+<div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h3 class="modal-title">Add a Question</h3>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+
+                <form id="myForm">
+
+                    <div class="form-group">
+                        @*<label for="cc-payment" class="control-label mb-1">Payment amount</label>*@
+                        @Html.LabelFor(q => q.Ques, new { @class = "control-label mb-1" })
+                        @*<input id="cc-pament" name="cc-payment" type="text" class="form-control" aria-required="true" aria-invalid="false" value="100.00">*@
+                        @Html.TextAreaFor(q => q.Ques, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(q => q.Ques)
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @*<label for="cc-exp" class="control-label mb-1">Option 1</label>*@
+                                @Html.LabelFor(q => q.Option1, new { @class = "control-label mb-1" })
+                                @Html.TextBoxFor(q => q.Option1, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(q => q.Option1)
+                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                @*<label for="cc-exp" class="control-label mb-1">Option 1</label>*@
+                                @Html.LabelFor(q => q.Option2, new { @class = "control-label mb-1" })
+                                @Html.TextBoxFor(q => q.Option2, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(q => q.Option2)
+                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                @*<label for="cc-exp" class="control-label mb-1">Option 1</label>*@
+                                @Html.LabelFor(q => q.Option3, new { @class = "control-label mb-1" })
+                                @Html.TextBoxFor(q => q.Option3, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(q => q.Option3)
+                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                @*<label for="cc-exp" class="control-label mb-1">Option 1</label>*@
+                                @Html.LabelFor(q => q.Option4, new { @class = "control-label mb-1" })
+                                @Html.TextBoxFor(q => q.Option4, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(q => q.Option4)
+                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @*<label for="cc-exp" class="control-label mb-1">Option 1</label>*@
+                                @Html.LabelFor(q => q.RightAnswer, new { @class = "control-label mb-1" })
+                                @Html.TextBoxFor(q => q.RightAnswer, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(q => q.RightAnswer)
+                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                @*<label for="cc-exp" class="control-label mb-1">Option 1</label>*@
+                                @Html.LabelFor(q => q.Mark, new { @class = "control-label mb-1" })
+                                @Html.TextBoxFor(q => q.Mark, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(q => q.Mark)
+                                <span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btnSubmit" class="btn btn-info">Submit</button>
+                    <button class="btn btn-warning">Reset</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#myModal" style="margin-bottom:5px"><i class="fas fa-plus"></i> Add Question</a>
+
+
+            <table id="questionTable" class="table table-striped table-bordered" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Correct Answer</th>
+                        <th>Mark</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+@*<link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />*@
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        var Popup, dataTable;
+
+        $(document).ready(function () {
+
+
+
+
+
+            dataTable = $("#questionTable").DataTable({
+                "ajax": {
+                    "url": "/Teachers/GetQuestion",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Ques", "width": "70%", "orderable": false },
+                    { "data": "RightAnswer", "orderable": false },
+                    { "data": "Mark" },
+                    {
+                        "data": "Id", "render": function (data) {
+                            return "<a class='btn btn-danger btn-sm'><i class = 'fa fa-trash' onclick=Delete("+data+")></i> Delete</a> "
+                        }, "orderable": false, "searchable": false
+                    }
+                ],
+                "language": {
+                    "emptyTable": "No questions set yet, Click <strong>Add Question</strong> to add new."
+                }
+            });
+
+            $("#btnSubmit").click(function () {
+
+                $.validator.unobtrusive.parse("#myForm");
+
+                if ($("#myForm").valid()) {
+
+                    var myformdata = $("#myForm").serialize();
+
+                    $.ajax({
+
+                        type: "POST",
+                        url: "/Teachers/AddOrEdit",
+                        data: myformdata,
+                        success: function () {
+
+                            $("#myModal").modal("hide");
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "bottom center",
+                                className: "success"
+                            });
+                        }
+
+                    })
+                }
+            })
+
+
+
+
+        });
+
+
+        function Delete(id) {
+            if (confirm("Are You sure you want to delete this exam?")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteQuestion", "Teachers")/' + id,
+                    success: function (data) {
+                        
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                        dataTable.ajax.reload();
+                    }
+                });
+            }
+        }
+
+    </script>
+}

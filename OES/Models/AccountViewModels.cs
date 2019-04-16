@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OES.Models
@@ -48,12 +50,12 @@ namespace OES.Models
 
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage ="Email is Required")]
         [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Password is Required")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -70,14 +72,14 @@ namespace OES.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Password can not be less then 6 characters", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Passwords Didn't Match")]
         public string ConfirmPassword { get; set; }
 
         public IEnumerable<UserType> UserTypes { get; set; }
@@ -87,7 +89,7 @@ namespace OES.Models
         public int UserTypeId { get; set; }
 
         public RegisterViewModel() {
-
+            
         }
 
         public RegisterViewModel(RegisterViewModel model) {

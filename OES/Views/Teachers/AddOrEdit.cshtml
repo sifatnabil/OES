@@ -1,0 +1,19 @@
+﻿@model OES.Models.Question
+
+@{
+    Layout = null;
+}
+
+
+@using (Html.BeginForm("AddOrEdit", "Teachers", FormMethod.Post, new { id = "myForm" })) {
+    <div class="form-group">
+        @Html.LabelFor(q => q.Ques)
+        @Html.TextBoxFor(q => q.Ques, new { @class = "form-control" })
+    </div>
+
+    <div class="modal-footer">
+        <button type="reset" class="btn btn-warning">Reset</button>
+        <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+    </div>
+}
+

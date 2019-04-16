@@ -1,0 +1,38 @@
+﻿<div class="account-wrap">
+    <div class="account-item clearfix js-item-menu">
+        <div class="image">
+            <img src="~/Content/Template/images/icon/avatar-01.jpg" alt="John Doe" />
+        </div>
+        <div class="content">
+            <a class="js-acc-btn" href="#">@User.Identity.Name</a>
+        </div>
+        <div class="account-dropdown js-dropdown">
+            <div class="info clearfix">
+                <div class="image">
+                    <a href="#">
+                        <img src="~/Content/Template/images/icon/avatar-01.jpg" alt="John Doe" />
+                    </a>
+                </div>
+                <div class="content">
+                    <h5 class="name">
+                        <a href="#">@User.Identity.Name</a>
+                    </h5>
+                    <span class="email"></span>
+                </div>
+            </div>
+            <div class="account-dropdown__body">
+                <div class="account-dropdown__item">
+                    <a href="@Url.Action("Index", "Manage")">
+                        <i class="zmdi zmdi-account"></i>Manage
+                    </a>
+                </div>
+                
+            </div>
+            <div class="account-dropdown__footer">
+                <a href="@Url.Action("LogOff", "Account")">
+                    <i class="zmdi zmdi-power"></i>Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

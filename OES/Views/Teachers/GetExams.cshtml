@@ -1,0 +1,69 @@
+﻿@model IEnumerable<OES.Models.Exam>
+@{
+    ViewBag.Title = "GetExams";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <table class="table table-responsive table-bordered table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var i in Model) {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(i.ExamName, "ViewQuestions", "Teachers", new { id = i.Id }, null)
+                            </td>
+                            <td>
+                                @i.ExamDate
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            dataTable = $("#examTable").DataTable({
+                "ajax": {
+                    "url": "/Teachers/GetExams",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "ExamName"},
+                    { "data": "ExamDate" }
+                ],
+                "language": {
+                    "emptyTable": "No questions set yet, Click <strong>Add Question</strong> to add new."
+                }
+            });
+
+            
+
+        });
+
+
+    </script>
+    }

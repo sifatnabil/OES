@@ -61,7 +61,12 @@ namespace OES.Controllers
         public ActionResult Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated) {
-                return RedirectToAction("Index", "Home");
+                if (User.IsInRole("Student"))
+                    return RedirectToAction("Index", "Students");
+                else if (User.IsInRole("Teacher"))
+                    return RedirectToAction("Index", "Teachers");
+                else
+                    return RedirectToAction("Index", "Admin");
             }
 
             ViewBag.ReturnUrl = returnUrl;
@@ -77,7 +82,8 @@ namespace OES.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ModelState.Clear();
+                return View();
             }
 
             // This doesn't count login failures towards account lockout
@@ -86,7 +92,7 @@ namespace OES.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Students");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -152,6 +158,8 @@ namespace OES.Controllers
 
             var viewModel = new RegisterViewModel();
             viewModel.UserTypes = _context.UserTypes.ToList();
+            
+
             return View(viewModel);
         }
 
@@ -171,6 +179,9 @@ namespace OES.Controllers
 
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded) {
+
+                        await UserManager.AddToRoleAsync(user.Id, "Teacher");
+
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -179,7 +190,7 @@ namespace OES.Controllers
                         // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Teachers");
                     }
                     AddErrors(result);
                 }
@@ -188,6 +199,9 @@ namespace OES.Controllers
 
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded) {
+
+                        await UserManager.AddToRoleAsync(user.Id, "Student");
+
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -196,7 +210,7 @@ namespace OES.Controllers
                         // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Students");
                     }
                     AddErrors(result);
                 }
@@ -423,12 +437,11 @@ namespace OES.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         //
